@@ -1,4 +1,4 @@
-import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER} from "./action"
+import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER, TOGGLE_SIDEBAR} from "./action"
 
 import { initialState } from "./appContext"//to logout 
 
@@ -39,6 +39,9 @@ const reducer = (state,action)=>{
     }
     if(action.type===SETUP_USER_ERROR){
         return {...state,isLoading:false, showAlert:true, alertType:'danger', alertText:action.payload.msg}
+    }
+    if(action.type===TOGGLE_SIDEBAR){
+        return {...state, showSidebar:!state.showSidebar}
     }
 
 
