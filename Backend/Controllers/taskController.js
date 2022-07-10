@@ -19,8 +19,8 @@ const createTask = async (req,res)=>{
 
 // Get all task according to the user
 const getTasks = async (req,res)=>{
-    const task = await Task.find({ createdBy: req.user.userId })
-    res.status(StatusCodes.OK).json({task, totalTasks: task.length})
+    const tasks = await Task.find({ createdBy: req.user.userId })
+    res.status(StatusCodes.OK).json({tasks, totalTasks: tasks.length})
 } 
 
 //update a task

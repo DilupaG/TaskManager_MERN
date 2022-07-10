@@ -1,4 +1,4 @@
-import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER, TOGGLE_SIDEBAR} from "./action"
+import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER, TOGGLE_SIDEBAR, GET_JOBS_BEGIN, GET_JOBS_SUCCESS} from "./action"
 
 import { initialState } from "./appContext"//to logout 
 
@@ -43,7 +43,17 @@ const reducer = (state,action)=>{
     if(action.type===TOGGLE_SIDEBAR){
         return {...state, showSidebar:!state.showSidebar}
     }
-
+    if (action.type === GET_JOBS_BEGIN) {
+        return { ...state, isLoading: true, showAlert: false }
+    }
+    if (action.type === GET_JOBS_SUCCESS) {
+        return {
+          ...state,
+          isLoading: false,
+          tasks: action.payload.tasks,
+          totalTasks: action.payload.totalTasks,
+        }
+    }
 
     throw new Error(`no such action : ${action.type}`)
 }

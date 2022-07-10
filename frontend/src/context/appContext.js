@@ -2,7 +2,7 @@ import React, {useReducer, useContext } from 'react'
 import reducer  from './reducer';
 import axios from 'axios';
 
-import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER, TOGGLE_SIDEBAR } from "./action"
+import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER, TOGGLE_SIDEBAR, GET_JOBS_BEGIN, GET_JOBS_SUCCESS } from "./action"
 
 
 // get user details from localStorage
@@ -13,6 +13,7 @@ const user = localStorage.getItem('user');
 const initialState = {
 
     isLoading: false,
+    isEditing:false,
     showAlert: false,
     alertText: '',
     alertType: '',
@@ -21,6 +22,7 @@ const initialState = {
     showSidebar:false,
     isEditing: false,
     tasks: [],
+    totalTasks:0
 
 }
 
@@ -140,11 +142,33 @@ const AppProvider = ({children}) => {
     // for toggling to sidebar
     const toggleSidebar = () => {
         dispatch({type:TOGGLE_SIDEBAR})
+    }
+
+    //getTasks
+    const getTasks = async () => {
+      let url = `/tasks`
+      dispatch({ type: GET_JOBS_BEGIN })
+      try {
+        const {data} = await authFetch(url);
+        const { tasks, totalTasks } = data
+  
+        dispatch({
+          type: GET_JOBS_SUCCESS,
+          payload: {
+            tasks,
+            totalTasks,
+          },
+        })
+  
+      } catch (error) {
+        console.log(error.response);
       }
+      clearAlert()
+    } 
 
     return (
         <div>
-            <AppContext.Provider value={{...state,displayAlert,registerUser,loginUser,setupUser, logoutUser,toggleSidebar }} >
+            <AppContext.Provider value={{...state,displayAlert,registerUser,loginUser,setupUser, logoutUser, toggleSidebar, getTasks }} >
                 {children}
             </AppContext.Provider>
         </div>

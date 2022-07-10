@@ -16,15 +16,15 @@ const TasksContainer = () => {
     return <Loading center/>
   }
 
-  if(jobs.length===0){
+  if(tasks.length===0){
     return <Wrapper>
-      <h2>No jobs to display...</h2>
+      <h2>No tasks to display...</h2>
     </Wrapper>
   }
 
   return (
     <Wrapper>
-      <h5>{totalTasks} job{tasks.length > 1 && 's'} found</h5>
+      <h5>{totalTasks} task{tasks.length > 1 && 's'} found</h5>
       <div className="jobs">
           {tasks.map((task)=>{
               return <Task key={task._id} {...task}/>

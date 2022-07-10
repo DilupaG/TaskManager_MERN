@@ -33,7 +33,7 @@ const PORT = process.env.PORT
 
 // routes
 app.use('/api/v1/user', userRoutes)
-app.use('/api/v1/task', authenticateUser,  taskRoutes)
+app.use('/api/v1/tasks', authenticateUser,  taskRoutes)
 
 
 //middleware

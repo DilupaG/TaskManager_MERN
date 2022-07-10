@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Landing, Register, ProtectedRoute } from './pages';
-import { SharedLayout } from './pages/home';
+import { AddTask, AllTasks, Profile, SharedLayout } from './pages/home';
 
 
 function App() {
@@ -12,6 +12,9 @@ function App() {
               <SharedLayout/>
             </ProtectedRoute>
         }>
+          <Route path='all-tasks' element={<AllTasks/>}/>
+          <Route path='add-task' element={<AddTask/>}/>
+          <Route path='profile' element={<Profile/>}/>
         </Route>
         <Route path='/landing' element={<Landing/>}/>
         <Route path='/register' element={<Register/>}/>
