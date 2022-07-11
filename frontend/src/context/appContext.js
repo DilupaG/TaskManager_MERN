@@ -20,14 +20,17 @@ const initialState = {
     user:user?JSON.parse(user):null,
     token:token,
     showSidebar:false,
-    isEditing: false,
     tasks: [],
     totalTasks:0,
     task:'',
     date:'',
     status:'inCompleted',
     statusOptions:['inCompleted','completed'],
-    editTaskId:''
+    editTaskId:'',
+    search: '',
+    searchStatus: 'all',
+    sort: 'latest',
+    sortOptions: ['latest', 'oldest'],
 
 }
 

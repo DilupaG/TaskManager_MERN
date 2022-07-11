@@ -4,8 +4,8 @@ import { SearchContainer, TasksContainer } from '../../components'
 const AllTasks = () => {
   return (
     <>
-      <TasksContainer/>
       <SearchContainer/>
+      <TasksContainer/>  
     </>
   )
 }

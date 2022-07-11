@@ -19,7 +19,32 @@ const createTask = async (req,res)=>{
 
 // Get all task according to the user
 const getTasks = async (req,res)=>{
-    const tasks = await Task.find({ createdBy: req.user.userId })
+
+    const {search, sort, status} = req.query;
+
+    const queryObject = {
+        createdBy: req.user.userId,
+    }
+
+     // add stuff based on condition
+
+    if (status && status !== 'all') {
+        queryObject.status = status
+    }
+    if (search) {
+        queryObject.task = { $regex: search, $options: 'i' }
+    }
+    
+    let result = Task.find(queryObject)
+
+    if (sort === 'latest') {
+        result = result.sort('-date')
+    }
+    if (sort === 'oldest') {
+        result = result.sort('date')
+    }
+    
+    const tasks = await result
     res.status(StatusCodes.OK).json({tasks, totalTasks: tasks.length})
 } 
 
