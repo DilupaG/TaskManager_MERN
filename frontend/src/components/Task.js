@@ -13,6 +13,19 @@ const Task = ({_id,task,date,status,}) => {
   let d = moment(date)
   d = d.format('MMM Do, YYYY')
 
+  let today = new Date();
+  let td = moment(today)
+  td = td.format('MMM Do, YYYY')
+
+  const highlight = () => {
+
+    if(d==td){
+      return <TaskInfo icon={<FaCalendarAlt />} text={<span className='btn-hipster'>{d}</span>}/>
+    }else{
+      return <TaskInfo icon={<FaCalendarAlt />} text={d} />
+    }
+
+  }
   return (
     <Wrapper>
       <header>
@@ -25,7 +38,7 @@ const Task = ({_id,task,date,status,}) => {
       <div className='content' >
         <div className="content-center">
           <TaskInfo icon={<FaLocationArrow/>}  text={task}/>
-          <TaskInfo icon={<FaCalendarAlt />} text={d} />
+          {highlight()}
           <div className={`status ${status}`}>{status}</div>
         </div>
         <footer>

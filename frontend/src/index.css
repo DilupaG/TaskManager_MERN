@@ -163,8 +163,8 @@ ul {
   box-shadow: var(--shadow-3);
 }
 .btn-hipster {
-  color: var(--primary-500);
-  background: var(--primary-200);
+  color: var(--primary-50);
+  background: var(--primary-700);
 }
 .btn-hipster:hover {
   color: var(--primary-200);
