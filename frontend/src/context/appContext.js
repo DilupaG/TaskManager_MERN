@@ -154,7 +154,14 @@ const AppProvider = ({children}) => {
 
     //getTasks
     const getTasks = async () => {
-      let url = `/tasks`
+
+      const { sort,searchStatus,search } = state
+
+      let url = `/tasks?status=${searchStatus}&sort=${sort}`
+      if(search){
+        url=url+`&search=${search}`
+      }
+      
       dispatch({ type: GET_JOBS_BEGIN })
       try {
         const {data} = await authFetch(url);

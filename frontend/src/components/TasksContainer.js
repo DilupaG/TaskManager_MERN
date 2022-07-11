@@ -6,11 +6,11 @@ import Wrapper from '../assets/wrappers/TasksContainer'
 
 const TasksContainer = () => {
 
-  const { getTasks, tasks, isLoading, totalTasks } = useAppContext()
+  const { getTasks, tasks, isLoading, totalTasks, search, sort, searchStatus } = useAppContext()
 
   useEffect(() => { 
     getTasks()   
-  }, []); 
+  }, [search, sort, searchStatus]); 
 
   if(isLoading){
     return <Loading center/>
