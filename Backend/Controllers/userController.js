@@ -1,4 +1,5 @@
 const User = require('../Model/User')
+const nodemailer = require('nodemailer')
 const { BadRequestError, UnAuthenticatedError } = require('../Errors/index')
 
 
@@ -66,5 +67,37 @@ const updateUser = async (req, res) => {
     res.status(200).json({ user, token })
   }
 
+  //reset password
+  const resetPassword = (req,res) => {
 
-  module.exports ={ register, login, updateUser }
+    const {email} = req.body 
+
+    const OTP = Math.floor(Math.random()*10000)
+   
+    const transporter = nodemailer.createTransport({
+        service:'gmail',
+        auth:{
+            user:'it20235574@my.sliit.lk',
+            pass:'981491769V'
+        }
+    })
+
+    const options = {
+        from:'it20235574@my.sliit.lk',
+        to:email,
+        subject: 'Reset your password - 1billion Task Manager',
+        text:`This is your verification code : ${OTP}`
+    }
+
+    transporter.sendMail(options,(err,info)=>{
+        if(err){
+            console.log(err);
+        }
+        res.json(info)
+    })
+
+
+  }
+
+
+  module.exports ={ register, login, updateUser, resetPassword }
