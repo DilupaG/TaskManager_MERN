@@ -6,12 +6,12 @@ import Wrapper from '../assets/wrappers/Task'
 import TaskInfo from './TaskInfo'
 
 
-const Task = ({_id,task,createdAt,status,}) => {
+const Task = ({_id,task,date,status,}) => {
 
   const { setEditTask, deleteTask } = useAppContext()
 
-  let date = moment(createdAt)
-  date = date.format('MMM Do, YYYY')
+  let d = moment(date)
+  d = d.format('MMM Do, YYYY')
 
   return (
     <Wrapper>
@@ -25,13 +25,13 @@ const Task = ({_id,task,createdAt,status,}) => {
       <div className='content' >
         <div className="content-center">
           <TaskInfo icon={<FaLocationArrow/>}  text={task}/>
-          <TaskInfo icon={<FaCalendarAlt />} text={date} />
+          <TaskInfo icon={<FaCalendarAlt />} text={d} />
           <div className={`status ${status}`}>{status}</div>
         </div>
         <footer>
           <div className='actions'>
             <Link
-              to='/addTask'
+              to='/add-task'
               onClick={() => setEditTask(_id)}
               className='btn edit-btn'
             >

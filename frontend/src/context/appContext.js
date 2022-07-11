@@ -2,7 +2,7 @@ import React, {useReducer, useContext } from 'react'
 import reducer  from './reducer';
 import axios from 'axios';
 
-import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER, TOGGLE_SIDEBAR, GET_JOBS_BEGIN, GET_JOBS_SUCCESS } from "./action"
+import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER, TOGGLE_SIDEBAR, GET_JOBS_BEGIN, GET_JOBS_SUCCESS, HANDLE_CHANGE, CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, CLEAR_VALUES, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, SET_EDIT_JOB, EDIT_JOB_BEGIN, EDIT_JOB_SUCCESS, EDIT_JOB_ERROR, DELETE_JOB_BEGIN } from "./action"
 
 
 // get user details from localStorage
@@ -22,7 +22,12 @@ const initialState = {
     showSidebar:false,
     isEditing: false,
     tasks: [],
-    totalTasks:0
+    totalTasks:0,
+    task:'',
+    date:'',
+    status:'inCompleted',
+    statusOptions:['inCompleted','completed'],
+    editTaskId:''
 
 }
 
@@ -166,13 +171,117 @@ const AppProvider = ({children}) => {
       clearAlert()
     } 
 
+    //when adding values to forms
+    const handleChange = ({ name, value }) => {
+      dispatch({
+        type: HANDLE_CHANGE,
+        payload: { name, value },
+      })
+    }
+
+    const clearValues = () => {
+      dispatch({type:CLEAR_VALUES})
+    }
+
+    const createTask = async () => {
+      dispatch({ type: CREATE_JOB_BEGIN })
+      try {
+        const { task, date, status } = state
+    
+        await authFetch.post('/tasks', {
+          task,
+          date,
+          status
+        })
+        dispatch({
+          type: CREATE_JOB_SUCCESS,
+        })
+        // call function instead clearValues()
+        dispatch({ type: CLEAR_VALUES })
+      } catch (error) {
+        if (error.response.status === 401) return
+        dispatch({
+          type: CREATE_JOB_ERROR,
+          payload: { msg: error.response.data.msg },
+        })
+      }
+      clearAlert()
+    }
+
+    const updateUser = async (currentUser) => {
+      dispatch({type:UPDATE_USER_BEGIN})
+        try {
+          const { data } = await authFetch.patch('/user/updateUser', currentUser);
+    
+          const {user, token} = data
+    
+          dispatch({
+            type: UPDATE_USER_SUCCESS,
+            payload: { user, token },
+          })
+          addUserToLocalStorage({ user, token })
+    
+        } catch (error) {
+          if(error.response.status!==401){
+            dispatch({
+              type: UPDATE_USER_ERROR,
+              payload: { msg: error.response.data.msg },
+            })
+          } 
+        }
+        clearAlert()
+      }
+
+      const setEditTask = (id) => {
+        dispatch({ type: SET_EDIT_JOB, payload: { id } })
+      }
+    
+      const editTask = async () => {
+        dispatch({ type: EDIT_JOB_BEGIN })
+    
+        const { task, date, status } = state
+        try {
+          await authFetch.patch(`/tasks/${state.editTaskId}`, {
+            task,
+            date,
+            status,
+          })
+      
+          dispatch({
+            type: EDIT_JOB_SUCCESS,
+          })
+      
+          dispatch({ type: CLEAR_VALUES })
+    
+        } catch (error) {
+            if (error.response.status === 401) return
+              dispatch({
+              type: EDIT_JOB_ERROR,
+              payload: { msg: error.response.data.msg },
+            })
+        }
+        clearAlert()
+      }
+    
+    
+      const deleteTask = async (taskId) =>{
+        dispatch({type:DELETE_JOB_BEGIN})
+        try {
+          await authFetch.delete(`/tasks/${taskId}`)
+          getTasks()
+    
+        } catch (error) {
+          console.log(error.response);
+        }
+      }
+
     return (
         <div>
-            <AppContext.Provider value={{...state,displayAlert,registerUser,loginUser,setupUser, logoutUser, toggleSidebar, getTasks }} >
+            <AppContext.Provider value={{...state,displayAlert,registerUser,loginUser,setupUser, logoutUser, toggleSidebar, getTasks, handleChange, createTask, clearValues, updateUser, setEditTask, editTask, deleteTask }} >
                 {children}
             </AppContext.Provider>
         </div>
-    )
+    ) 
 
 }
 

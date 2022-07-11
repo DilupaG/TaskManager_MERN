@@ -21,7 +21,9 @@ const Navbar = () => {
 
         <div>
           <Logo />
-          <h3 className='logo-text'>dashboard</h3>
+          <h3 className='logo-text'>
+            <span>1</span>billion Task  Manager
+          </h3>
         </div>
 
         <div className='btn-container'>

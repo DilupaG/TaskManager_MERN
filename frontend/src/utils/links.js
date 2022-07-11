@@ -4,26 +4,21 @@ import { FaWpforms } from 'react-icons/fa'
 import { ImProfile } from 'react-icons/im'
 
 const links = [
+  
   {
     id: 1,
-    text: 'stats',
-    path: '/',
-    icon: <IoBarChartSharp />,
-  },
-  {
-    id: 2,
     text: 'all tasks',
     path: 'all-tasks',
     icon: <MdQueryStats />,
   },
   {
-    id: 3,
+    id: 2,
     text: 'add task',
     path: 'add-task',
     icon: <FaWpforms />,
   },
   {
-    id: 4,
+    id: 3,
     text: 'profile',
     path: 'profile',
     icon: <ImProfile />,
