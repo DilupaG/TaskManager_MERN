@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Landing, Register, ProtectedRoute } from './pages';
+import { Landing, Register, ProtectedRoute, ResetPassword } from './pages';
 import { AddTask, AllTasks, Profile, SharedLayout } from './pages/home';
 
 
@@ -18,6 +18,8 @@ function App() {
         </Route>
         <Route path='/landing' element={<Landing/>}/>
         <Route path='/register' element={<Register/>}/>
+        <Route path='/resetPassword' element={<ResetPassword/>}/>
+
       </Routes>
     </BrowserRouter>
   );

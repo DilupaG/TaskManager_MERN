@@ -52,7 +52,7 @@ const updateUser = async (req, res) => {
 
     if (!email || !name || !password) {
         throw new BadRequestError('Please provide all values')
-      }
+    }
    
     const user = await User.findOne({ _id: req.user.userId })
   
@@ -67,10 +67,16 @@ const updateUser = async (req, res) => {
     res.status(200).json({ user, token })
   }
 
-  //reset password
-  const resetPassword = (req,res) => {
+  //email verification 
+  const sendOTP = async (req,res) => {
 
     const {email} = req.body 
+
+    const user = await User.findOne({ email })
+
+    if (!user) {
+        throw new UnAuthenticatedError('Invalid Email')
+    }
 
     const OTP = Math.floor(Math.random()*10000)
    
@@ -91,13 +97,37 @@ const updateUser = async (req, res) => {
 
     transporter.sendMail(options,(err,info)=>{
         if(err){
-            console.log(err);
+            throw new BadRequestError('SystemError')
         }
-        res.json(info)
+        res.json({systemOTP:OTP})
     })
 
+  }
+
+  //reset password
+  const resetPassword = async (req,res) => {
+
+    const {password,email}=req.body
+
+    if (!email || !password) {
+        throw new BadRequestError('Please provide all values')
+    }
+
+    const user = await User.findOne({ email })
+
+    if (!user) {
+        throw new UnAuthenticatedError('Invalid Email')
+    }
+  
+    user.email = email
+    user.password = password
+  
+    await user.save()
+
+    res.status(200).json({ user })
 
   }
 
 
-  module.exports ={ register, login, updateUser, resetPassword }
+
+  module.exports = { register, login, updateUser, sendOTP, resetPassword }

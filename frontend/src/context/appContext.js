@@ -2,7 +2,7 @@ import React, {useReducer, useContext } from 'react'
 import reducer  from './reducer';
 import axios from 'axios';
 
-import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER, TOGGLE_SIDEBAR, GET_JOBS_BEGIN, GET_JOBS_SUCCESS, HANDLE_CHANGE, CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, CLEAR_VALUES, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, SET_EDIT_JOB, EDIT_JOB_BEGIN, EDIT_JOB_SUCCESS, EDIT_JOB_ERROR, DELETE_JOB_BEGIN } from "./action"
+import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER, TOGGLE_SIDEBAR, GET_JOBS_BEGIN, GET_JOBS_SUCCESS, HANDLE_CHANGE, CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, CLEAR_VALUES, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, SET_EDIT_JOB, EDIT_JOB_BEGIN, EDIT_JOB_SUCCESS, EDIT_JOB_ERROR, DELETE_JOB_BEGIN, OTP_SEND_BEGIN, OTP_SEND_SUCCESS, OTP_SEND_ERROR } from "./action"
 
 
 // get user details from localStorage
@@ -285,9 +285,20 @@ const AppProvider = ({children}) => {
         }
       }
 
+
+    //   const sendOTP = async ({email,alertText})=>{
+    //     dispatch({type:OTP_SEND_BEGIN})
+    //     try {
+    //       const {data} = await axios.post('/api/v1/user/sendOTP',{email})
+    //       dispatch({type:OTP_SEND_SUCCESS,payload:{alertText}})
+    //     } catch (error) {
+    //       dispatch({type:OTP_SEND_ERROR, payload:{msg: error.response.data.msg}})
+    //     }
+    //     clearAlert()
+    // }
     return (
         <div>
-            <AppContext.Provider value={{...state,displayAlert,registerUser,loginUser,setupUser, logoutUser, toggleSidebar, getTasks, handleChange, createTask, clearValues, updateUser, setEditTask, editTask, deleteTask }} >
+            <AppContext.Provider value={{...state,displayAlert,registerUser,loginUser,setupUser, logoutUser, toggleSidebar, getTasks, handleChange, createTask, clearValues, updateUser, setEditTask, editTask, deleteTask, }} >
                 {children}
             </AppContext.Provider>
         </div>

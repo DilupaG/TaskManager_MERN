@@ -48,6 +48,10 @@ const Register = () => {
    setValues({...values, isMember:!values.isMember})
  }
 
+ const forgot = () => {
+  navigate('/resetPassword')
+}
+
   return (
     <Wrapper className='full-page'>
 
@@ -73,7 +77,7 @@ const Register = () => {
         </p>
         <p>
           {values.isMember ? 'forgot password?':''}
-          <button type='button' onClick={toggle} className='member-btn'>{values.isMember ? 'Reset':''}</button>
+          <button type='button' onClick={forgot} className='member-btn'>{values.isMember ? 'Reset':''}</button>
         </p>
       </form>
 
