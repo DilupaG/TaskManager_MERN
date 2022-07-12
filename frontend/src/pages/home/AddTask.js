@@ -5,7 +5,7 @@ import moment from 'moment'
 
 const AddTask = () => {
 
-  const {
+  let {
     isLoading,
     isEditing,
     showAlert,

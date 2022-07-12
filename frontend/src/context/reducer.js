@@ -99,12 +99,14 @@ const reducer = (state,action)=>{
     if (action.type === SET_EDIT_JOB) {
         const t = state.tasks.find((task) => task._id === action.payload.id)
         const { _id, task, date, status } = t
+        var res = date.substring(0, 10);
+
         return {
           ...state,
           isEditing: true,
           editTaskId: _id,
           task,
-          date,
+          date:res,
           status,
         }
     }
