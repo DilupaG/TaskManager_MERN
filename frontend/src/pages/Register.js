@@ -29,6 +29,7 @@ const Register = () => {
       return 
     }
     const currentUser = {name,email,password}
+    // conditionally calling the endpoint
     if(isMember){
       setupUser({currentUser,endPoint:'login',alertText:'Login Successful! Redirecting...'});
     }else{
@@ -56,7 +57,6 @@ const Register = () => {
     <Wrapper className='full-page'>
 
       <form onSubmit={onSubmit} className="form">
-        {/* <Logo/> */}
         {values.isMember ? <h3>Login</h3>:<h3>Register</h3>}
         {showAlert&&<Alert/>}
 

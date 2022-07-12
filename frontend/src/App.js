@@ -12,7 +12,7 @@ function App() {
               <SharedLayout/>
             </ProtectedRoute>
         }>
-          <Route path='all-tasks' element={<AllTasks/>}/>
+          <Route index element={<AllTasks/>}/>
           <Route path='add-task' element={<AddTask/>}/>
           <Route path='profile' element={<Profile/>}/>
         </Route>

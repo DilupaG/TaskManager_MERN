@@ -84,7 +84,7 @@ const updateUser = async (req, res) => {
         service:'gmail',
         auth:{
             user:'it20235574@my.sliit.lk',
-            pass:'981491769V'
+            pass:process.env.EMAIL_PASSWORD
         }
     })
 

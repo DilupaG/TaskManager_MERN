@@ -2,7 +2,7 @@ import React, {useReducer, useContext } from 'react'
 import reducer  from './reducer';
 import axios from 'axios';
 
-import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER, TOGGLE_SIDEBAR, GET_JOBS_BEGIN, GET_JOBS_SUCCESS, HANDLE_CHANGE, CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, CLEAR_VALUES, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, SET_EDIT_JOB, EDIT_JOB_BEGIN, EDIT_JOB_SUCCESS, EDIT_JOB_ERROR, DELETE_JOB_BEGIN, OTP_SEND_BEGIN, OTP_SEND_SUCCESS, OTP_SEND_ERROR } from "./action"
+import { DISPLAY_ALERT, CLEAR_ALERT, SETUP_USER_BEGIN, SETUP_USER_SUCCESS, SETUP_USER_ERROR, LOGOUT_USER, TOGGLE_SIDEBAR, GET_TASK_BEGIN, GET_TASK_SUCCESS, HANDLE_CHANGE, CREATE_TASK_BEGIN, CREATE_TASK_SUCCESS, CREATE_TASK_ERROR, CLEAR_VALUES, UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR, SET_EDIT_TASK, EDIT_TASK_BEGIN, EDIT_TASK_SUCCESS, EDIT_TASK_ERROR, DELETE_TASK_BEGIN } from "./action"
 
 
 // get user details from localStorage
@@ -98,39 +98,6 @@ const AppProvider = ({children}) => {
         removeUserToLocalStorage()
     }
 
-    //register user function.............................................................................................
-    const registerUser = async (currentUser)=>{
-        dispatch({type:REGISTER_USER_BEGIN})
-        try {
-          const response = await axios.post('/api/v1/user/register',currentUser);
-          // console.log(response);
-          const {user,token} = response.data
-          dispatch({type:REGISTER_USER_SUCCESS,payload:{user,token}})
-          addUserToLocalStorage({user,token})
-        } catch (error) {
-          // console.log(error.response);
-          dispatch({type:REGISTER_USER_ERROR, payload:{msg: error.response.data.msg}})
-        }
-        clearAlert()
-    }
-    
-    //login user function
-    const loginUser = async (currentUser)=>{
-        dispatch({type:LOGIN_USER_BEGIN})
-        try {
-          const {data} = await axios.post('/api/v1/user/login',currentUser);
-          // console.log(response);
-          const {user,token} = data
-          dispatch({type:LOGIN_USER_SUCCESS,payload:{user,token}})
-          addUserToLocalStorage({user,token})
-        } catch (error) {
-          // console.log(error.response);
-          dispatch({type:LOGIN_USER_ERROR, payload:{msg: error.response.data.msg}})
-        }
-        clearAlert()
-    }
-    // .............................................................................................................................
-    
     //one function for user registration and user login
     const setupUser = async ({currentUser,endPoint,alertText})=>{
         dispatch({type:SETUP_USER_BEGIN})
@@ -162,13 +129,13 @@ const AppProvider = ({children}) => {
         url=url+`&search=${search}`
       }
       
-      dispatch({ type: GET_JOBS_BEGIN })
+      dispatch({ type: GET_TASK_BEGIN })
       try {
         const {data} = await authFetch(url);
         const { tasks, totalTasks } = data
   
         dispatch({
-          type: GET_JOBS_SUCCESS,
+          type: GET_TASK_SUCCESS,
           payload: {
             tasks,
             totalTasks,
@@ -189,12 +156,14 @@ const AppProvider = ({children}) => {
       })
     }
 
+    //for clear values of a form
     const clearValues = () => {
       dispatch({type:CLEAR_VALUES})
     }
 
+    //add task
     const createTask = async () => {
-      dispatch({ type: CREATE_JOB_BEGIN })
+      dispatch({ type: CREATE_TASK_BEGIN })
       try {
         const { task, date, status } = state
     
@@ -204,20 +173,21 @@ const AppProvider = ({children}) => {
           status
         })
         dispatch({
-          type: CREATE_JOB_SUCCESS,
+          type: CREATE_TASK_SUCCESS,
         })
         // call function instead clearValues()
         dispatch({ type: CLEAR_VALUES })
       } catch (error) {
         if (error.response.status === 401) return
         dispatch({
-          type: CREATE_JOB_ERROR,
+          type: CREATE_TASK_ERROR,
           payload: { msg: error.response.data.msg },
         })
       }
       clearAlert()
     }
 
+    //update a user details
     const updateUser = async (currentUser) => {
       dispatch({type:UPDATE_USER_BEGIN})
         try {
@@ -242,12 +212,14 @@ const AppProvider = ({children}) => {
         clearAlert()
       }
 
+      //make ready selecting task for updating
       const setEditTask = (id) => {
-        dispatch({ type: SET_EDIT_JOB, payload: { id } })
+        dispatch({ type: SET_EDIT_TASK, payload: { id } })
       }
     
+      //update task features
       const editTask = async () => {
-        dispatch({ type: EDIT_JOB_BEGIN })
+        dispatch({ type: EDIT_TASK_BEGIN })
     
         const { task, date, status } = state
         try {
@@ -258,7 +230,7 @@ const AppProvider = ({children}) => {
           })
       
           dispatch({
-            type: EDIT_JOB_SUCCESS,
+            type: EDIT_TASK_SUCCESS,
           })
       
           dispatch({ type: CLEAR_VALUES })
@@ -266,16 +238,16 @@ const AppProvider = ({children}) => {
         } catch (error) {
             if (error.response.status === 401) return
               dispatch({
-              type: EDIT_JOB_ERROR,
+              type: EDIT_TASK_ERROR,
               payload: { msg: error.response.data.msg },
             })
         }
         clearAlert()
       }
     
-    
+      //delete task
       const deleteTask = async (taskId) =>{
-        dispatch({type:DELETE_JOB_BEGIN})
+        dispatch({type:DELETE_TASK_BEGIN})
         try {
           await authFetch.delete(`/tasks/${taskId}`)
           getTasks()
@@ -296,9 +268,10 @@ const AppProvider = ({children}) => {
     //     }
     //     clearAlert()
     // }
+    
     return (
         <div>
-            <AppContext.Provider value={{...state,displayAlert,registerUser,loginUser,setupUser, logoutUser, toggleSidebar, getTasks, handleChange, createTask, clearValues, updateUser, setEditTask, editTask, deleteTask, }} >
+            <AppContext.Provider value={{...state,displayAlert,setupUser, logoutUser, toggleSidebar, getTasks, handleChange, createTask, clearValues, updateUser, setEditTask, editTask, deleteTask, }} >
                 {children}
             </AppContext.Provider>
         </div>

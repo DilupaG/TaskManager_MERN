@@ -2,8 +2,6 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Wrapper from '../../assets/wrappers/SharedLayout'
 import {BigSidebar, Navbar, SmallSidebar} from '../../components'
-import AllTasks from './AllTasks'
-
 
 const SharedLayout = () => {
   return (
@@ -14,8 +12,7 @@ const SharedLayout = () => {
         <div>
           <Navbar/>
           <div className="dashboard-page">
-            <Outlet/>
-          
+            <Outlet/>          
           </div>
         </div>
       </main>
